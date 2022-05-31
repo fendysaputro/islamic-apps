@@ -7,4 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="dark_transparant">#B3000000</color>
+    <color name="cl_white_less">#E5E5E5</color>
+    <color name="cl_yellow">#FFC000</color>
+    <color name="cl_grey_transparant">#737577</color>
+    <color name="cl_grey">#777777</color>
+    <color name="cl_black">#22272B</color>
+    <color name="cl_black_less">#2E3339</color>
+    <color name="cl_dark_grey">#555555</color>
+
 </resources>

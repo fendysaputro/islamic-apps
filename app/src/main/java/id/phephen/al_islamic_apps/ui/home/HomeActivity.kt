@@ -1,7 +1,8 @@
-package id.phephen.al_islamic_apps
+package id.phephen.al_islamic_apps.ui.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import id.phephen.al_islamic_apps.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
