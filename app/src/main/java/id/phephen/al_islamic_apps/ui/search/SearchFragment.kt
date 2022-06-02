@@ -1,60 +1,74 @@
 package id.phephen.al_islamic_apps.ui.search
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import id.phephen.al_islamic_apps.R
+import id.phephen.al_islamic_apps.databinding.FragmentSearchBinding
+import id.phephen.al_islamic_apps.helper.Resource
+import id.phephen.al_islamic_apps.network.response.ListSurahResponse
+import id.phephen.al_islamic_apps.ui.detail.DetailActivity
+import id.phephen.al_islamic_apps.ui.home.HomeViewModel
+import id.phephen.al_islamic_apps.ui.search.adapter.SearchAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentSearchBinding
+    private val homeViewModel by lazy { ViewModelProvider(requireActivity()).get(HomeViewModel::class.java) }
+    private lateinit var searchAdapter: SearchAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupObserver()
+        setupRV()
+        setupListener()
+    }
+
+    private fun setupListener() {
+        binding.etSearch.doAfterTextChanged {
+            searchAdapter.filter.filter(it.toString())
+        }
+        binding.refreshList.setOnRefreshListener {
+            homeViewModel.fetchListSurah()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+    private fun setupObserver() {
+        homeViewModel.listSurahResponse.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                is Resource.Loading -> Log.d("_result2", "Loading")
+                is Resource.Success -> {
+                    Log.d("_result2", it.data.toString())
+                    searchAdapter.setData(it.data!!.data)
+                }
+                is Resource.Error -> Log.d("_result2", it.message.toString())
+            }
+        })
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun setupRV() {
+        searchAdapter = SearchAdapter(arrayListOf(), object: SearchAdapter.OnAdapterListener {
+            override fun onClick(result: ListSurahResponse.DetailSurah) {
+                startActivity(Intent(requireContext(), DetailActivity::class.java)
+                    .putExtra("numberSurah", result.number.toString()))
             }
+        })
+        binding.rvListSearch.adapter = searchAdapter
     }
+
 }

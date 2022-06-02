@@ -5,56 +5,75 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import id.phephen.al_islamic_apps.R
+import id.phephen.al_islamic_apps.databinding.FragmentDetailBinding
+import id.phephen.al_islamic_apps.helper.Resource
+import id.phephen.al_islamic_apps.network.response.DetailSurahResponse
+import id.phephen.al_islamic_apps.ui.detail.adapter.ListAyahAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val noSurah by lazy { requireActivity().intent.getStringExtra("numberSurah") }
+    private val viewModel by lazy { ViewModelProvider(requireActivity()).get(DetailViewModel::class.java) }
+    private lateinit var binding: FragmentDetailBinding
+    private lateinit var listAyahAdapter: ListAyahAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        binding = FragmentDetailBinding.inflate(layoutInflater, container, false)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.fetchDetailSurah(noSurah.toString())
+        setupObserver()
+        setupListener()
+    }
+
+    private fun setupListener() {
+
+    }
+
+    private fun setupObserver() {
+        viewModel.detailResponse.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.rolling.visibility = View.VISIBLE
+                }
+                is Resource.Success -> {
+                    binding.rolling.visibility = View.GONE
+                    setupView(it.data)
+                    setupRV(it.data!!.data.verses)
+                }
+                is Resource.Error -> {
+                    binding.rolling.visibility = View.GONE
                 }
             }
+        })
     }
+
+    private fun setupRV(verses: List<DetailSurahResponse.DataSurah.VersesSurah>) {
+        listAyahAdapter = ListAyahAdapter( verses, object : ListAyahAdapter.OnAdapterListener {
+            override fun onClick(result: DetailSurahResponse.DataSurah.VersesSurah) {
+                viewModel.fetchTafsir(
+                    noSurah.toString(),
+                    result.number.inSurah.toString())
+                findNavController().navigate(R.id.action_detailFragment_to_tafsirFragment)
+            }
+        })
+        binding.rvListAyat.adapter = listAyahAdapter
+    }
+
+    private fun setupView(data: DetailSurahResponse?) {
+        binding.tvNumberSurah.text = data!!.data.number.toString()
+        binding.tvNameSurah.text = data!!.data.name.long + " | " + data!!.data.name.transliteration.id
+        binding.tvInfoSurah.text = data!!.data.numberOfVerses.toString()+ " | "+ data!!.data.revelation.id
+    }
+
 }

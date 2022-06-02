@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/detail_navigation">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_navigation"
+    app:startDestination="@+id/detailFragment">
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="id.phephen.al_islamic_apps.ui.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+
+        <action
+            android:id="@+id/action_detailFragment_to_tafsirFragment"
+            app:destination="@+id/tafsirFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tafsirFragment"
+        android:name="id.phephen.al_islamic_apps.ui.tafsir.TafsirFragment"
+        android:label="fragment_tafsir"
+        tools:layout="@layout/fragment_tafsir" />
 
 </navigation>
