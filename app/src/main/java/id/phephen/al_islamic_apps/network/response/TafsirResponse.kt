@@ -1,8 +1,3 @@
-package id.phephen.al_islamic_apps.network.response
-
-/**
- * Created by Phephen on 31/05/2022.
- */
 data class TafsirResponse(
     val code: Int,
     val status: String,
@@ -16,8 +11,8 @@ data class TafsirResponse(
         val translation: Translation,
         val audio: Audio,
         val tafsir: Tafsir,
-        val surah: Surah
-    ) {
+        val surah: Surah,
+    ){
         data class NumberSurah(
             val inQuran: Int,
             val inSurah: Int
@@ -29,7 +24,7 @@ data class TafsirResponse(
             val ruku: Int,
             val hizbQuarter: Int,
             val sajda: Sajda
-        ) {
+        ){
             data class Sajda(
                 val recommended: Boolean,
                 val obligatory: Boolean
@@ -38,7 +33,7 @@ data class TafsirResponse(
         data class Text(
             val arab: String,
             val transliteration: Transliteration
-        ) {
+        ){
             data class Transliteration(
                 val en: String
             )
@@ -53,7 +48,7 @@ data class TafsirResponse(
         )
         data class Tafsir(
             val id: Id
-        ) {
+        ){
             data class Id(
                 val short: String,
                 val long: String
@@ -65,14 +60,14 @@ data class TafsirResponse(
             val numberOfVerses: Int,
             val name: NameSurah,
             val revelation: Revelation,
-            val tafsir: SubTafsir
-        ) {
+            val tafsir: SubTafsir,
+        ){
             data class NameSurah(
                 val short: String,
                 val long: String,
                 val transliteration: Transliteration,
                 val translation: SubTranslation
-            ) {
+            ){
                 data class Transliteration(
                     val en: String,
                     val id: String

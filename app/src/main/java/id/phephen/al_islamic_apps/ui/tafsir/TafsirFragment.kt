@@ -11,7 +11,6 @@ import id.phephen.al_islamic_apps.R
 import id.phephen.al_islamic_apps.databinding.FragmentTafsirBinding
 import id.phephen.al_islamic_apps.helper.Helper
 import id.phephen.al_islamic_apps.helper.Resource
-import id.phephen.al_islamic_apps.network.response.TafsirResponse
 import id.phephen.al_islamic_apps.ui.detail.DetailViewModel
 
 class TafsirFragment : Fragment() {

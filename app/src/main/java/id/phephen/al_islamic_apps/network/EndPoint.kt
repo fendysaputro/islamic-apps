@@ -1,8 +1,8 @@
 package id.phephen.al_islamic_apps.network
 
+import TafsirResponse
 import id.phephen.al_islamic_apps.network.response.DetailSurahResponse
 import id.phephen.al_islamic_apps.network.response.ListSurahResponse
-import id.phephen.al_islamic_apps.network.response.TafsirResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -19,7 +19,9 @@ interface EndPoint {
     suspend fun detailSurah(@Path("surah") surah: String): Response<DetailSurahResponse>
 
     @GET("surah/{surah}/{ayah}")
-    suspend fun tafsirSurah(@Path("surah") surah: String,
-    @Path("ayah") ayah: String): Response<TafsirResponse>
+    suspend fun tafsirSurah(
+        @Path("surah") surah: String,
+        @Path("ayah") ayah: String
+    ): Response<TafsirResponse>
 
 }

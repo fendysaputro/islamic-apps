@@ -1,12 +1,13 @@
 package id.phephen.al_islamic_apps.ui.detail
 
+import TafsirResponse
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import id.phephen.al_islamic_apps.helper.Resource
 import id.phephen.al_islamic_apps.network.AlquranRepository
 import id.phephen.al_islamic_apps.network.response.DetailSurahResponse
-import id.phephen.al_islamic_apps.network.response.TafsirResponse
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -22,11 +23,14 @@ class DetailViewModel(private val repository: AlquranRepository): ViewModel() {
         surah: String
     ) = viewModelScope.launch {
         detailResponse.value = Resource.Loading()
+        Log.d("_result3", "Loading!!")
         try {
             val response = repository.fetchDetailSurah(surah)
             detailResponse.value = Resource.Success(response.body()!!)
+            Log.d("_result3", response.body().toString() )
         } catch (e: Exception) {
             detailResponse.value = Resource.Error(e.message.toString())
+            Log.d("_result3", e.message.toString() )
         }
     }
 

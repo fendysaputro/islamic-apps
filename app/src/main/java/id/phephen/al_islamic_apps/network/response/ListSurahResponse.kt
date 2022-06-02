@@ -3,6 +3,7 @@ package id.phephen.al_islamic_apps.network.response
 /**
  * Created by Phephen on 31/05/2022.
  */
+
 data class ListSurahResponse(
     val code: Int,
     val status: String,
@@ -16,13 +17,13 @@ data class ListSurahResponse(
         val name: NameSurah,
         val revelation: RevelationSurah,
         val tafsir: TafsirSurah
-    ) {
+    ){
         data class NameSurah(
             val short: String,
             val long: String,
             val transliteration: Transliteration,
             val translation: Translation
-        ) {
+        ){
             data class Transliteration(
                 val en: String,
                 val id: String

@@ -3,6 +3,7 @@ package id.phephen.al_islamic_apps.network.response
 /**
  * Created by Phephen on 31/05/2022.
  */
+
 data class DetailSurahResponse(
     val code: Int,
     val status: String,
@@ -18,14 +19,14 @@ data class DetailSurahResponse(
         val tafsir: TafsirSurah,
         val preBismillah: PreBismillahSurah,
         val verses: List<VersesSurah>
-    ) {
+    ){
         data class NameSurah(
             val short: String,
             val long: String,
-            val transliteration: TransilerationSurah,
+            val transliteration: TransliterationSurah,
             val translation: TranslationSurah
-        ) {
-            data class TransilerationSurah(
+        ){
+            data class TransliterationSurah(
                 val en: String,
                 val id: String
             )
@@ -45,15 +46,15 @@ data class DetailSurahResponse(
         data class PreBismillahSurah(
             val text: Text,
             val translation: Translation,
-            val audio: Audio
-        ) {
+            val audio: Audio,
+        ){
             data class Text(
                 val arab: String,
                 val transliteration: Transliteration
-            ) {
-                data class Transliteration (
+            ){
+                data class Transliteration(
                     val en: String
-                    )
+                )
             }
             data class Translation(
                 val en: String,
@@ -70,8 +71,8 @@ data class DetailSurahResponse(
             val text: Text,
             val translation: Translation,
             val audio: Audio,
-            val tafsir: Tafsir
-        ) {
+            val tafsir: Tafsir,
+        ){
             data class NumberSurah(
                 val inQuran: Int,
                 val inSurah: Int
@@ -83,7 +84,7 @@ data class DetailSurahResponse(
                 val ruku: Int,
                 val hizbQuarter: Int,
                 val sajda: Sajda
-            ) {
+            ){
                 data class Sajda(
                     val recommended: Boolean,
                     val obligatory: Boolean
@@ -92,7 +93,7 @@ data class DetailSurahResponse(
             data class Text(
                 val arab: String,
                 val transliteration: Transliteration
-            ) {
+            ){
                 data class Transliteration(
                     val en: String
                 )
@@ -107,7 +108,7 @@ data class DetailSurahResponse(
             )
             data class Tafsir(
                 val id: Id
-            ) {
+            ){
                 data class Id(
                     val short: String,
                     val long: String
